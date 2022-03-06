@@ -14,7 +14,7 @@ static void razMarque(GrapheMat* graphe){
 }
 
 static void ecrireEtape(Matrice a , Matrice p , int k , int ns , int nMax){
-  printf("Passage par le sommet numero %d\n",k);
+  printf("Passage par le sommet numero : %d\n\n",k);
 
   for(int i =0 ; i<ns ; i++){
     for(int j = 0 ; j<ns ; j++){
@@ -30,7 +30,7 @@ static void ecrireEtape(Matrice a , Matrice p , int k , int ns , int nMax){
     }
     printf("\n");
   }
-  printf("\n");
+  printf("\n\n");
 }
 
 //function rang
