@@ -3,11 +3,34 @@
 #include <string.h>
 #include "graphemat.h"
 
+
+//Matrix
+
 //initializer graphe avec false values
 
 static void razMarque(GrapheMat* graphe){
   for(int i = 0 ; i< graphe->n ; i++)
     graphe->marque[i] = faux;
+}
+
+static void ecrireEtape(Matrice a , Matrice p , int k , int ns , int nMax){
+  printf("Passage par le sommet numero %d\n",k);
+
+  for(int i =0 ; i<ns ; i++){
+    for(int j = 0 ; j<ns ; j++){
+      if(a[i*nMax+k] == INFINI){
+        printf(" %3s","*");
+      }else{
+        printf(" %3d",a[i*nMax+j]);
+      }
+    }
+    printf("%6s"," ");
+    for(int j = 0; j< ns ; j++){
+      printf("%3d", p[i*nMax+j]);
+    }
+    printf("\n");
+  }
+  printf("\n");
 }
 
 //function rang
@@ -131,6 +154,44 @@ void DFS(GrapheMat* graphe){
   }
 }
 
+//Floyd
+static void initFloyd(GrapheMat* graphe , Matrice* a , Matrice* p){
+  int nMax = graphe->nMax;
+
+  Matrice ta = (int*) malloc(sizeof(int) *nMax *nMax);
+  Matrice tp = (int*) malloc(sizeof(int) *nMax *nMax);
+
+  for(int i = 0 ;  i<graphe->n ; i++){
+    for(int j = 0 ; j< graphe->n ; j++){
+      ta[i*nMax+j] = graphe->valeur[i*nMax+j];
+      tp[i*nMax+j] = i;
+    }
+  }
+
+  *a = ta;
+  *p = tp;
+}
+
+void floyd(GrapheMat* graphe){
+  Matrice a , p;
+  int n = graphe->n;
+  int nMax = graphe->nMax;
+
+  initFloyd(graphe,&a, &p);
+
+  for(int k=0 ; k<n ; k++){
+    for(int i = 0 ; i<n ; i++){
+      for(int j = 0 ; j<n ; j++){
+        if((a[i*nMax+k] != INFINI) && (a[k*nMax+j] != INFINI) && (a[i*nMax+k]+a[k*nMax+j] < a[i*nMax+j]) ){
+          a[i*nMax+j] = a[i*nMax+k] + a[k*nMax+j];
+          p[i*nMax+j] = p[k*nMax+j];
+        }
+      }
+    }
+    ecrireEtape(a, p , k , n, nMax);
+  }
+}
+
 
 
 
@@ -155,8 +216,9 @@ int main(){
   printf("3 : Ajouter un Sommet \n");
   printf("4 : Ajouter un Arc \n");
   printf("5 : Ecrire Graphe \n");
-  printf("6 : DFS \n");
-  printf("7 : Exit \n");
+  printf("6 : DFS Algorithm\n");
+  printf("7 : Floyd Algorithm\n");
+  printf("8 : Exit \n");
   printf("Choisir une commande a faire : ");
   scanf("%d",&choice);
 
@@ -205,6 +267,10 @@ int main(){
       printf("\n");
       break;
     case 7:
+      printf("\n\nFloyd Algorithm : ");
+      floyd(graphe);
+      break;
+    case 8:
       repeat = -1;
       exit(-1);
       break;
