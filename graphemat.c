@@ -132,9 +132,21 @@ void DFS(GrapheMat* graphe){
 }
 
 
+
+
 int main(){
 
+  int choice ;
   int repeat = 1;
+  int Maxi = 20;
+  GrapheMat* graphe = NULL;
+  int valeur;
+  char nom1[20];
+  char nom2[20];
+  int cost;
+  char nom[20];
+
+
   while(repeat){
   printf("\n\t\tHey Hey And Welcome Again\n");
   printf("\t****************************************\n");
@@ -146,31 +158,51 @@ int main(){
   printf("6 : DFS \n");
   printf("7 : Exit \n");
   printf("Choisir une commande a faire : ");
-
-  int choice ;
-  int Maxi ;
   scanf("%d",&choice);
+
+
+
   switch (choice) {
     case 1:
       //do something
-      Maxi = 20;
-      char* valeur;
       printf("Entrez le nombre maximum du sommet default(20): ");
       scanf("%d",&Maxi);
-      printf("Entrez la valeur du graphe value ou non (faux/vrai): " );
-      scanf("%s",valeur);
-      GrapheMat* graphe = creerGrapheMat(10, vrai);
+      printf("Entrez la valeur du graphe value ou non (1/0): " );
+      scanf("%d",&valeur);
+      graphe = creerGrapheMat(10, valeur);
       printf("\nGraphe creer avec succes\n");
       break;
     case 2:
+      detruireGraphe(graphe);
+      printf("\nGraphe a été detruit");
       break;
     case 3:
+
+      printf("Ajouter le nom su Sommet : ");
+      scanf("%s",nom);
+      ajouterUnSommet(graphe,nom);
+      printf("\nSommet ajoute avec succes\n");
       break;
     case 4:
+
+      printf("Entrez le nom du premier sommet : ");
+      scanf("%s",nom1);
+      printf("Entrez le nom du deuxieme sommet : ");
+      scanf("%s",nom2);
+      printf("Entrez le cout : ");
+      scanf("%d",&cost);
+      ajouterUnArc(graphe,nom1,nom2,cost);
+      printf("\nArc ajoute avec succes\n");
       break;
     case 5:
+      printf("Voila le graphe : ");
+      ecrireGraphe(graphe);
+      printf("\n");
       break;
     case 6:
+      printf("Deep First Search : \n");
+      DFS(graphe);
+      printf("\n");
       break;
     case 7:
       repeat = -1;
@@ -182,7 +214,6 @@ int main(){
   }
 
 }
-
 
 
   return 0;
