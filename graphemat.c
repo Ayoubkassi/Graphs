@@ -206,6 +206,8 @@ int main(){
   char nom2[20];
   int cost;
   char nom[20];
+  int nbSommet;
+  int nbArc;
 
 
   while(repeat){
@@ -239,22 +241,29 @@ int main(){
       printf("\nGraphe a été detruit");
       break;
     case 3:
-
-      printf("Ajouter le nom su Sommet : ");
-      scanf("%s",nom);
-      ajouterUnSommet(graphe,nom);
-      printf("\nSommet ajoute avec succes\n");
+      printf("Entrez le nombre de sommet : ");
+      scanf("%d",&nbSommet);
+      for(int i =0 ; i<nbSommet ; i++){
+        printf("Ajouter le nom su Sommet : ");
+        scanf("%s",nom);
+        ajouterUnSommet(graphe,nom);
+        printf("\nSommet %d ajoute avec succes\n",i);
+      }
       break;
     case 4:
 
-      printf("Entrez le nom du premier sommet : ");
-      scanf("%s",nom1);
-      printf("Entrez le nom du deuxieme sommet : ");
-      scanf("%s",nom2);
-      printf("Entrez le cout : ");
-      scanf("%d",&cost);
-      ajouterUnArc(graphe,nom1,nom2,cost);
-      printf("\nArc ajoute avec succes\n");
+      printf("Entrez le nombre d\'arc : ");
+      scanf("%d",&nbArc);
+      for(int i = 0 ; i< nbArc ; i++){
+        printf("Entrez le nom du premier sommet : ");
+        scanf("%s",nom1);
+        printf("Entrez le nom du deuxieme sommet : ");
+        scanf("%s",nom2);
+        printf("Entrez le cout : ");
+        scanf("%d",&cost);
+        ajouterUnArc(graphe,nom1,nom2,cost);
+        printf("\nArc %d ajoute avec succes\n",i);
+      }
       break;
     case 5:
       printf("Voila le graphe : ");
