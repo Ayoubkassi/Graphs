@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "graphemat.h"
+#include <sys/queue.h>
+#include "queue.c"
+
 
 
 //Matrix
@@ -154,6 +157,24 @@ void DFS(GrapheMat* graphe){
   }
 }
 
+void BFS(GrapheMat* graphe){
+  razMarque(graphe);
+  void* s;
+  //creer une pile pour stocker les donnes
+  //Creation d'une queue est l'initialiser
+  queue *q1;
+  init_queue(q1);
+  //marquer le sommet courrant comme visite
+  graphe->marque[0] = vrai;
+  enqueue(q1,graphe->nomS[0]);
+  int i = 0;
+  while(!(empty(q1)) && i == 0){
+    s = dequeue(q1);
+    i++;
+  }
+
+}
+
 //Floyd
 static void initFloyd(GrapheMat* graphe , Matrice* a , Matrice* p){
   int nMax = graphe->nMax;
@@ -195,6 +216,8 @@ void floyd(GrapheMat* graphe){
 
 
 
+
+
 int main(){
 
   int choice ;
@@ -219,8 +242,9 @@ int main(){
   printf("4 : Ajouter un Arc \n");
   printf("5 : Ecrire Graphe \n");
   printf("6 : DFS Algorithm\n");
-  printf("7 : Floyd Algorithm\n");
-  printf("8 : Exit \n");
+  printf("7 : BFS algorithm\n");
+  printf("8 : Floyd Algorithm\n");
+  printf("9 : Exit \n");
   printf("Choisir une commande a faire : ");
   scanf("%d",&choice);
 
@@ -275,11 +299,16 @@ int main(){
       DFS(graphe);
       printf("\n");
       break;
-    case 7:
+    case 8:
       printf("\n\nFloyd Algorithm : ");
       floyd(graphe);
       break;
-    case 8:
+    case 7:
+      printf("\n\nBreath First Search : \n");
+      BFS(graphe);
+      printf("\n");
+      break;
+    case 9:
       repeat = -1;
       exit(-1);
       break;
