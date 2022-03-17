@@ -163,14 +163,13 @@ void BFS(GrapheMat* graphe){
   //creer une pile pour stocker les donnes
   //Creation d'une queue est l'initialiser
   queue *q1;
-  init_queue(q1);
+  init_queue(&q1);
   //marquer le sommet courrant comme visite
   graphe->marque[0] = vrai;
   enqueue(q1,graphe->nomS[0]);
   int i = 0;
-  while(!(empty(q1)) && i == 0){
-    s = dequeue(q1);
-    i++;
+  while((t = dequeue(&q1)) != QUEUE_EMPTY){
+    
   }
 
 }

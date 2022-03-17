@@ -4,12 +4,12 @@
 #include <stdbool.h>
 #include <limits.h>
 
-#define QUEUE_EMPTY INT_MIN
+#define QUEUE_EMPTY CHAR_MIN
 
 
 
 typedef struct node{
-  int value;
+  char *value;
   struct node *next;
 } node;
 
@@ -24,7 +24,7 @@ void init_queue(queue *q){
 }
 
 
-bool enqueue(queue *q, int value){
+bool enqueue(queue *q, char *value){
   node *newnode = malloc(sizeof(node));
   if(newnode == NULL) return false;
   newnode->value = value;
@@ -39,14 +39,14 @@ bool enqueue(queue *q, int value){
   return true;
 }
 
-bool empty(queue* q){
-  return (q->head == NULL && q->tail == NULL);
-}
+// bool empty(queue* q){
+//   return (q->head == NULL && q->tail == NULL);
+// }
 
-int dequeue(queue *q){
+char* dequeue(queue *q){
   if(q->head == NULL) return QUEUE_EMPTY;
   node *tmp = q->head;
-  int result = tmp->value;
+  char* result = tmp->value;
   q->head = q->head->next;
   if(q->head == NULL){
     q->tail = NULL;
@@ -58,12 +58,12 @@ int dequeue(queue *q){
 int main(){
   queue q1;
   init_queue(&q1);
-  enqueue(&q1, 10);
-  enqueue(&q1, 20);
-  enqueue(&q1, 30);
-  enqueue(&q1, 40);
-  int t;
+  enqueue(&q1, "S1");
+  enqueue(&q1, "S2");
+  enqueue(&q1, "S3");
+  enqueue(&q1, "S4");
+  char *t;
   while((t = dequeue(&q1)) != QUEUE_EMPTY){
-    printf("%d \n",t);
+    printf("%s \n",t);
   }
 }
