@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <stdbool.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define faux 0
 #define vrai 1
@@ -6,6 +10,28 @@
 typedef char NomSom[20]; //Nom du Sommet
 typedef int booleen;
 typedef int* Matrice;
+
+
+//queue stuff
+
+#define QUEUE_EMPTY CHAR_MIN
+
+
+
+typedef struct node{
+  char *value;
+  struct node *next;
+} node;
+
+typedef struct{
+  node *head;
+  node *tail;
+  int length;
+} queue;
+
+
+//end queue stuff
+
 
 typedef struct{
   int n;           //Nombre de sommet
@@ -24,4 +50,12 @@ void ajouterUnSommet(GrapheMat* graphe, NomSom nom);
 void ajouterUnArc(GrapheMat* graphe , NomSom D , NomSom somA , int cout);
 void ecrireGraphe(GrapheMat* graphe);
 void DFS(GrapheMat* graphe);
-void BFS(GrapheMat* graphe);
+void BFS(GrapheMat* graphe , int pos, queue* q1);
+void enLargeur(GrapheMat* graphe);
+
+//queue stuff functions
+
+bool enqueue(queue *q, char *value);
+char* dequeue(queue *q);
+void init_queue(queue *q);
+bool empty_queue(queue* q);

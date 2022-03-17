@@ -16,11 +16,13 @@ typedef struct node{
 typedef struct{
   node *head;
   node *tail;
+  int length;
 } queue;
 
 void init_queue(queue *q){
   q->head = NULL;
   q->tail = NULL;
+  q->length = 0;
 }
 
 
@@ -36,12 +38,13 @@ bool enqueue(queue *q, char *value){
   if(q->head == NULL){
     q->head = newnode;
   }
+  q->length++;
   return true;
 }
 
-// bool empty(queue* q){
-//   return (q->head == NULL && q->tail == NULL);
-// }
+bool empty(queue* q){
+  return (q->head == NULL && q->tail == NULL);
+}
 
 char* dequeue(queue *q){
   if(q->head == NULL) return QUEUE_EMPTY;
@@ -51,9 +54,14 @@ char* dequeue(queue *q){
   if(q->head == NULL){
     q->tail = NULL;
   }
+  q->length--;
   return result;
 }
 
+
+bool empty_queue(queue* q){
+  return q->length == 0;
+}
 
 int main(){
   queue q1;
@@ -63,7 +71,8 @@ int main(){
   enqueue(&q1, "S3");
   enqueue(&q1, "S4");
   char *t;
-  while((t = dequeue(&q1)) != QUEUE_EMPTY){
+  while(!empty_queue(&q1)){
+    t = dequeue(&q1);
     printf("%s \n",t);
   }
 }

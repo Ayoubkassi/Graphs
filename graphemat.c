@@ -3,13 +3,53 @@
 #include <string.h>
 #include "graphemat.h"
 #include <sys/queue.h>
-#include "queue.c"
 
 
 
 //Matrix
 
 //initializer graphe avec false values
+
+//queue stuff
+
+char* dequeue(queue *q){
+  if(q->head == NULL) return QUEUE_EMPTY;
+  node *tmp = q->head;
+  char* result = tmp->value;
+  q->head = q->head->next;
+  if(q->head == NULL){
+    q->tail = NULL;
+  }
+  q->length--;
+  return result;
+}
+
+bool enqueue(queue *q, char *value){
+  node *newnode = malloc(sizeof(node));
+  if(newnode == NULL) return false;
+  newnode->value = value;
+  newnode->next = NULL;
+  if(q->tail != NULL){
+    q->tail->next = newnode;
+  }
+  q->tail = newnode;
+  if(q->head == NULL){
+    q->head = newnode;
+  }
+  q->length++;
+  return true;
+}
+
+void init_queue(queue *q){
+  q->head = NULL;
+  q->tail = NULL;
+  q->length = 0;
+}
+
+bool empty_queue(queue* q){
+  return q->length == 0;
+}
+
 
 static void razMarque(GrapheMat* graphe){
   for(int i = 0 ; i< graphe->n ; i++)
@@ -157,21 +197,37 @@ void DFS(GrapheMat* graphe){
   }
 }
 
-void BFS(GrapheMat* graphe){
+void enLargeur(GrapheMat* graphe){
   razMarque(graphe);
-  void* s;
+  queue *q1;
+  init_queue(q1);
+  for(int i = 0; i< graphe->n ; i++){
+    if(!graphe->marque[i])
+      BFS(graphe,i,q1);
+  }
+}
+
+void BFS(GrapheMat* graphe , int pos , queue *q1){
   //creer une pile pour stocker les donnes
   //Creation d'une queue est l'initialiser
-  queue *q1;
-  init_queue(&q1);
-  //marquer le sommet courrant comme visite
-  graphe->marque[0] = vrai;
-  enqueue(q1,graphe->nomS[0]);
-  int i = 0;
-  while((t = dequeue(&q1)) != QUEUE_EMPTY){
-    
-  }
 
+  int nMax = graphe->nMax;
+  //marquer le sommet courrant comme visite
+  graphe->marque[pos] = vrai;
+  enqueue(q1,graphe->nomS[pos]);
+
+  char *t;
+  while((empty_queue(q1)) == false){
+    t = dequeue(q1);
+    printf("%s \n",t);
+    //chercher les noued connecter avec et empiler les dans le pile
+    for(int i = 0 ; i< graphe->n ; i++){
+      if((graphe->element[pos*nMax+i] == vrai) && !graphe->marque[i]){
+        enqueue(q1,graphe->nomS[i]);
+        graphe->marque[i] = vrai;
+      }
+    }
+  }
 }
 
 //Floyd
@@ -304,7 +360,7 @@ int main(){
       break;
     case 7:
       printf("\n\nBreath First Search : \n");
-      BFS(graphe);
+      enLargeur(graphe);
       printf("\n");
       break;
     case 9:
