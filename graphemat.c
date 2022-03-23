@@ -287,24 +287,23 @@ void BFS(GrapheMat* graphe , int pos , queue *q1){
 //
 // }
 
-void InsideLimitedDfs(GrapheMat* graphe , int nodePos , int limit){
-  int nMax = graphe->nMax;
-  graphe->marque[nodePos] = vrai;
-  printf("%s ,", graphe->nomS[nodePos]);
+int InsideLimitedDfs(GrapheMat* graphe , int nodePos , int limit){
 
 
-  if(limit == 1){
-    //return coupure
-  }else if(limit == 0){
-    return -1;
-  }
-  else{
-    for(int i=0 ; graphe->n ; i++){
-      if((graphe->element[nodePos*nMax+i] == vrai) && !graphe->marque[i]){
-        InsideLimitedDfs(graphe , i , limit - 1);
+  if(limit > 0){
+    /* code */
+      int nMax = graphe->nMax;
+      graphe->marque[nodePos] = vrai;
+      printf("%s \n", graphe->nomS[nodePos]);
+
+      //SEARCH in his child
+      for(int i=0 ; i < graphe->n ; i++){
+        if((graphe->element[nodePos*nMax+i] == vrai) && !graphe->marque[i] && (i != nodePos)){
+          InsideLimitedDfs(graphe , i , limit - 1);
+        }
       }
     }
-  }
+
 
 }
 
@@ -320,6 +319,7 @@ void LimitedDfs(GrapheMat* graphe, int limit){
   //for(int i = 0 ; i < graphe->n ; i++){
     //if(!graphe->marque[i])
     //get all childs of first node
+    printf("DFS Limited in Stage : %d\n",limit);
     int nMax = graphe->nMax;
     int FirstNodeChilds[30];
     int childNum = 0;
@@ -332,10 +332,14 @@ void LimitedDfs(GrapheMat* graphe, int limit){
     }
     //call it with root
     InsideLimitedDfs(graphe , 0 , limit);
+    //printf("End for first call");
     //call it with all childs one by one in the queue
-    for(int i = 0 ; i< childNum; i++){
-      InsideLimitedDfs(graphe , FirstNodeChilds[i] , limit - 1);
-    }
+    //but this must be effectued if we have limit >=1
+    // if(limit >=1){
+    //   for(int i = 1 ; i< childNum; i++){
+    //     InsideLimitedDfs(graphe , FirstNodeChilds[i] , limit - 1);
+    //   }
+    // }
 
   //}
 }
@@ -396,6 +400,7 @@ int main(){
   char nom[20];
   int nbSommet;
   int nbArc;
+  int limitDFS;
 
 
   while(repeat){
@@ -478,8 +483,10 @@ int main(){
       break;
 
     case 8:
+      printf("Entrez la limite d'exploration de DFS : ");
+      scanf("%d",&limitDFS);
       printf("\n\nLimited DFS Algorithm : \n");
-      LimitedDfs(graphe,1);
+      LimitedDfs(graphe,limitDFS);
       printf("\n");
       break;
     case 9:
