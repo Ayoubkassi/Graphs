@@ -186,6 +186,40 @@ static void profondeur(GrapheMat* graphe , int numSommet){
   }
 }
 
+static void profondeurLimite(GrapheMat* graphe , int numSommet , int limit){
+  int nMax = graphe->nMax;
+  graphe->marque[numSommet] = vrai;
+  printf("%s ,", graphe->nomS[numSommet]);
+  int callNumbers = 0;
+
+  for(int i = 0 ; i< graphe->n ; i++){
+    //ajouter une condition pour l'arret du profondeur dans un certain niveau
+    if((graphe->element[numSommet*nMax+i] == vrai) && !graphe->marque[i]){
+      ++callNumbers;
+      if(callNumbers<=limit)
+        profondeur(graphe , i);
+      else
+        break;
+    }
+  }
+}
+
+//WHAT IS The fucking solution : is that
+//we gonna apply DFS but at each level we going to stop in a level and this level will be incremented each time
+
+//Start Iterative DFS
+
+void IterativeDFS(GrapheMat* graphe){
+    //On va appeler une DFS Pour chaque graphe limite
+  razMarque(graphe);
+  for(int j = 0 ; j< graphe-> n ; j++){
+    printf("\nDFS For level %d is : \n",j);
+    for(int i = 0; i< graphe->n ; i++){
+      if(!graphe->marque[i])
+        profondeurLimite(graphe,i,j);
+    }
+  }
+}
 
 //DFS
 
@@ -196,6 +230,7 @@ void DFS(GrapheMat* graphe){
       profondeur(graphe,i);
   }
 }
+
 
 void enLargeur(GrapheMat* graphe){
   razMarque(graphe);
@@ -210,7 +245,6 @@ void enLargeur(GrapheMat* graphe){
 void BFS(GrapheMat* graphe , int pos , queue *q1){
   //creer une pile pour stocker les donnes
   //Creation d'une queue est l'initialiser
-
   int nMax = graphe->nMax;
   //marquer le sommet courrant comme visite
   graphe->marque[pos] = vrai;
@@ -228,6 +262,64 @@ void BFS(GrapheMat* graphe , int pos , queue *q1){
       }
     }
   }
+}
+
+
+
+//so the algorithm is :
+//1 - get every node level -> level to stop in
+//2- how using queue , for each root , we gonna impelement BFS adn get all childs of that level
+//3- implement recursive DFS with limit condition
+//4- limit is DFS until one of last childs then getback
+
+// void InsideLimitedDfs(GrapheMat* graphe , int node , int limit){
+//   int nMax = graphe->nMax;
+//   //so search over all nodes and add them into initialize stack
+//   graphe->marque[node] = vrai;
+//   for(int i = 0 ; i< graphe->n ; i++){
+//     //verifier qu'il a une relation et que c'etais pas encore visite
+//     //verifier la limite est encore non acheve
+//     if((graphe->element[node*nMax+i] == vrai) && (graphe->marque[i] == faux)){
+//       InsideLimitedDfs(graphe , i , limit);
+//     }
+//   }
+//
+//
+// }
+
+void InsideLimitedDfs(GrapheMat* graphe , int nodePos , int limit){
+  int nMax = graphe->nMax;
+  graphe->marque[nodePos] = vrai;
+  printf("%s ,", graphe->nomS[nodePos]);
+
+
+  if(limit == 0){
+    //return coupure
+    return;
+  }else{
+    int stop = 0;
+    for(int i=0 ; graphe->n ; i++){
+      if((graphe->element[nodePos*nMax+i] == vrai) && !graphe->marque[i]){
+        InsideLimitedDfs(graphe , i , limit - 1);
+      }
+    }
+  }
+
+}
+
+
+//the algorithm is too simple , we gonna start by the roor node
+//get all her childs
+//make recursive call with limit parameter
+//at each iteration we process --limit;
+//end as condition of stop if limit = 0 we gonna stop and go into the next childs
+
+void LimitedDfs(GrapheMat* graphe, int limit){
+  razMarque(graphe);
+  //for(int i = 0 ; i < graphe->n ; i++){
+    //if(!graphe->marque[i])
+    InsideLimitedDfs(graphe , 0 , limit);
+  //}
 }
 
 //Floyd
@@ -289,7 +381,7 @@ int main(){
 
 
   while(repeat){
-  printf("\n\t\tHey Hey And Welcome Again\n");
+  printf("\n\t\tHey Hey And Welcome Again Ait Lahcen\n");
   printf("\t****************************************\n");
   printf("1 : Creer un Graphe \n");
   printf("2 : Detruire un Graphe \n");
@@ -298,8 +390,9 @@ int main(){
   printf("5 : Ecrire Graphe \n");
   printf("6 : DFS Algorithm\n");
   printf("7 : BFS algorithm\n");
-  printf("8 : Floyd Algorithm\n");
-  printf("9 : Exit \n");
+  printf("8 : Limited DFS Algorithm\n");
+  printf("9 : Floyd Algorithm\n");
+  printf("10 : Exit \n");
   printf("Choisir une commande a faire : ");
   scanf("%d",&choice);
 
@@ -315,20 +408,23 @@ int main(){
       graphe = creerGrapheMat(10, valeur);
       printf("\nGraphe creer avec succes\n");
       break;
+
     case 2:
       detruireGraphe(graphe);
       printf("\nGraphe a été detruit");
       break;
+
     case 3:
       printf("Entrez le nombre de sommet : ");
       scanf("%d",&nbSommet);
       for(int i =0 ; i<nbSommet ; i++){
-        printf("Ajouter le nom su Sommet : ");
+        printf("Ajouter le nom du  Sommet : ");
         scanf("%s",nom);
         ajouterUnSommet(graphe,nom);
         printf("\nSommet %d ajoute avec succes\n",i);
       }
       break;
+
     case 4:
 
       printf("Entrez le nombre d\'arc : ");
@@ -344,26 +440,36 @@ int main(){
         printf("\nArc %d ajoute avec succes\n",i);
       }
       break;
+
     case 5:
       printf("Voila le graphe : ");
       ecrireGraphe(graphe);
       printf("\n");
       break;
+
     case 6:
       printf("Deep First Search : \n");
       DFS(graphe);
       printf("\n");
       break;
-    case 8:
-      printf("\n\nFloyd Algorithm : ");
-      floyd(graphe);
-      break;
+
     case 7:
       printf("\n\nBreath First Search : \n");
       enLargeur(graphe);
       printf("\n");
       break;
+
+    case 8:
+      printf("\n\nLimited DFS Algorithm : \n");
+      LimitedDfs(graphe,2);
+      printf("\n");
+      break;
     case 9:
+      printf("\n\nFloyd Algorithm : ");
+      floyd(graphe);
+      break;
+
+    case 10:
       repeat = -1;
       exit(-1);
       break;
@@ -373,7 +479,6 @@ int main(){
   }
 
 }
-
 
   return 0;
 }

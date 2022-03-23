@@ -52,7 +52,7 @@ void ecrireGraphe(GrapheMat* graphe);
 void DFS(GrapheMat* graphe);
 void BFS(GrapheMat* graphe , int pos, queue* q1);
 void enLargeur(GrapheMat* graphe);
-
+void IterativeDFS(GrapheMat* graphe);
 //queue stuff functions
 
 bool enqueue(queue *q, char *value);
