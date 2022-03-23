@@ -293,11 +293,12 @@ void InsideLimitedDfs(GrapheMat* graphe , int nodePos , int limit){
   printf("%s ,", graphe->nomS[nodePos]);
 
 
-  if(limit == 0){
+  if(limit == 1){
     //return coupure
-    return;
-  }else{
-    int stop = 0;
+  }else if(limit == 0){
+    return -1;
+  }
+  else{
     for(int i=0 ; graphe->n ; i++){
       if((graphe->element[nodePos*nMax+i] == vrai) && !graphe->marque[i]){
         InsideLimitedDfs(graphe , i , limit - 1);
@@ -318,7 +319,24 @@ void LimitedDfs(GrapheMat* graphe, int limit){
   razMarque(graphe);
   //for(int i = 0 ; i < graphe->n ; i++){
     //if(!graphe->marque[i])
+    //get all childs of first node
+    int nMax = graphe->nMax;
+    int FirstNodeChilds[30];
+    int childNum = 0;
+    int pos=0;
+    for(int i = 0 ; i < graphe->n ; i++){
+      if((graphe->element[pos*nMax+i] == vrai) && pos != i){
+        //printf("child is : %d",i);
+        FirstNodeChilds[childNum++]=i;
+      }
+    }
+    //call it with root
     InsideLimitedDfs(graphe , 0 , limit);
+    //call it with all childs one by one in the queue
+    for(int i = 0 ; i< childNum; i++){
+      InsideLimitedDfs(graphe , FirstNodeChilds[i] , limit - 1);
+    }
+
   //}
 }
 
@@ -461,7 +479,7 @@ int main(){
 
     case 8:
       printf("\n\nLimited DFS Algorithm : \n");
-      LimitedDfs(graphe,2);
+      LimitedDfs(graphe,1);
       printf("\n");
       break;
     case 9:
